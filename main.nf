@@ -76,7 +76,7 @@ ome_ch
 
 process make_story{
   errorStrategy params.errorStrategy
-  publishDir "$params.outdir", saveAs: {filname -> "$name/story.json"}
+  publishDir "$params.outdir", saveAs: {filname -> "autominerva/${name}.story.json"}
   echo params.echo
   when:
     params.minerva == true || params.all == true
@@ -84,6 +84,10 @@ process make_story{
     set name, file(ome) from ome_story_ch
   output:
     set name, file('story.json') into story_ch
+  stub:
+  """
+  touch story.json
+  """
   script:
   if(params.he == true)
     """
@@ -101,7 +105,7 @@ story_ch
 
 process render_pyramid{
   errorStrategy params.errorStrategy
-  publishDir "$params.outdir", saveAs: {filname -> "$name/minerva-story"}
+  publishDir "$params.outdir", saveAs: {filname -> "minerva_stories/$name"}
   echo params.echo
    when:
     params.minerva == true || params.all == true
@@ -109,6 +113,10 @@ process render_pyramid{
     set name, file(story), file(ome) from story_ome_paired_ch
   output:
     file '*'
+  stub:
+  """
+  mkdir minerva
+  """
   script:
   """
   python3  /minerva-author/src/save_exhibit_pyramid.py $ome $story 'minerva'
@@ -118,7 +126,7 @@ process render_pyramid{
 
 process render_miniature{
   errorStrategy params.errorStrategy
-  publishDir "$params.outdir", saveAs: {filname -> "$name"}
+  publishDir "$params.outdir", saveAs: {filname -> "thumbnails"}
   echo params.echo
   when:
     params.miniature == true || params.all == true
@@ -129,7 +137,7 @@ process render_miniature{
   stub:
   """
   mkdir data
-  touch data/miniature.png
+  touch data/${name}.png
   """
   script:
   """
@@ -139,7 +147,7 @@ process render_miniature{
 }
 
 process get_metadata{
-  publishDir "$params.outdir", saveAs: {filname -> "$name/metadata.json"}
+  publishDir "$params.outdir", saveAs: {filname -> "metadata/{$name}.json"}
   errorStrategy params.errorStrategy
   echo params.echo
   when:
