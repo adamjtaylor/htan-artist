@@ -18,5 +18,6 @@ echo "${ome/$planes_str/$planes_str_new}" > new.ome.xml
 
 echo "Injecting replacement XML"
 tiffcomment -set 'new.ome.xml' !{ome}
+cp !{ome} !{name}-fixed.ome.tiff
 
 echo "Complete!"
