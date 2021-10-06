@@ -88,6 +88,24 @@ ome_ch
   .mix(converted_ch)
   .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch }
 
+process fix_planecount{
+  label "process_medium"
+  echo params.echo
+  errorStrategy params.errorStrategy
+  when:
+    params.minerva == true || params.all == true
+  input:
+    set parent, name, file(ome) from ome_story_ch
+  output:
+    set parent, name, file(ome) into ome2_story_ch
+  stub:
+  """
+  touch $ome
+  """
+  shell:
+  template 'fix-washu.sh'
+}
+
 process make_story{
   label "process_medium"
   errorStrategy params.errorStrategy
@@ -96,7 +114,7 @@ process make_story{
   when:
     params.minerva == true || params.all == true
   input:
-    set parent, name, file(ome) from ome_story_ch
+    set parent, name, file(ome) from ome2_story_ch
   output:
     set parent, name, file('story.json'), file(ome) into ome_pyramid_ch
   stub:
