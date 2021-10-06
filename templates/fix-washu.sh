@@ -1,5 +1,6 @@
 #!/bin/bash
-ome=$(tiffcomment !{ome})
+cp !{ome} !{name}-fixed.ome.tiff
+ome=$(tiffcomment !{name}-fixed.ome.tiff)
 sizec_str=$(echo $ome | grep -oE "SizeC=.(\d+).")
 sizec_num=$(echo $sizec_str | grep -oE "\d+")
 echo "SizeC: $sizec_num"
@@ -18,6 +19,5 @@ echo "${ome/$planes_str/$planes_str_new}" > new.ome.xml
 
 echo "Injecting replacement XML"
 tiffcomment -set 'new.ome.xml' !{ome}
-cp !{ome} !{name}-fixed.ome.tiff
 
 echo "Complete!"
