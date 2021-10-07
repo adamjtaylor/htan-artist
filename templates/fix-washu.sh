@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Reading file: $1"
-cp $1 fixed.ome.tiff
+cp $1 "$PWD/fixed.ome.tiff"
 echo "Extracting tiffcomment"
 xml=$(tiffcomment fixed.ome.tiff)
 echo "$xml"
@@ -21,6 +21,6 @@ echo "${xml/$planes_str/$planes_str_new}"
 echo "${xml/$planes_str/$planes_str_new}" > new.ome.xml
 
 echo "Injecting replacement XML"
-tiffcomment -set 'new.ome.xml' 'fixed.ome.tiff'
+tiffcomment -set 'new.ome.xml' "$PWD/fixed.ome.tiff"
 
 echo "Complete!"
