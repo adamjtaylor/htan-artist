@@ -97,10 +97,10 @@ process fix_planecount{
   input:
     set parent, name, file(ome) from ome_story_ch
   output:
-    set parent, name, file("${name}-fixed.ome.tiff") into ome2_story_ch
+    set parent, name, file("fixed.ome.tiff") into ome2_story_ch
   stub:
   """
-  touch $ome
+  touch fixed.ome.tiff
   """
   shell:
   template 'fix-washu.sh'
