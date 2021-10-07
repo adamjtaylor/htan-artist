@@ -2,7 +2,7 @@
 echo "Reading file: $1"
 cp $1 "$PWD/fixed.ome.tiff"
 echo "Extracting tiffcomment"
-xml=$(tiffcomment fixed.ome.tiff)
+xml=$(tiffcomment "$PWD/fixed.ome.tiff")
 echo "$xml"
 
 echo "Extracting SizeC"
