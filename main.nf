@@ -88,7 +88,7 @@ ome_ch
   .mix(converted_ch)
   .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch }
 
-fix_script = "https://gist.githubusercontent.com/adamjtaylor/819fd3a6f5faaaa9a146d80fd7db9788/raw/318d62ea4d546fcca636f0ec175d70b5b47749b9/fix-washu.sh"
+fix_script = 'https://gist.githubusercontent.com/adamjtaylor/819fd3a6f5faaaa9a146d80fd7db9788/raw/318d62ea4d546fcca636f0ec175d70b5b47749b9/fix-washu.sh'
 
 process fix_planecount{
   label "process_medium"
@@ -106,7 +106,7 @@ process fix_planecount{
   """
   script:
   """
-  wget -o fix-washu.sh $fix_script
+  wget -O fix-washu.sh $fix_script
   bash fix-washu.sh $ome
   """
 }
