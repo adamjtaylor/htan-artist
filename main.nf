@@ -102,8 +102,10 @@ process fix_planecount{
   """
   touch fixed.ome.tiff
   """
-  shell:
-  template 'fix-washu.sh'
+  script:
+  """
+  bash $projectDir/templates/fix-washu.sh $ome
+  """
 }
 
 process make_story{

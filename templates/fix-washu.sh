@@ -1,23 +1,26 @@
 #!/bin/bash
-cp !{ome} fixed.ome.tiff
-ome=$(tiffcomment fixed.ome.tiff)
-sizec_str=$(echo $ome | grep -oE "SizeC=.(\d+).")
-sizec_num=$(echo $sizec_str | grep -oE "\d+")
-echo "SizeC: $sizec_num"
+echo "Reading file: $1"
+cp $1 fixed.ome.tiff
+echo "Extracting tiffcomment"
+xml=$(tiffcomment fixed.ome.tiff)
+echo "$xml"
 
-planes_str=$(echo $ome | grep -oE "PlaneCount=.(\d+)." )
-planes_num=$(echo $planes_str | grep -oE "\d+")
-echo "planes: $planes_num"
+echo "Extracting SizeC"
+sizec_str=$(echo "$xml" | grep -o 'SizeC="[0-9]\+"')
+echo "$sizec_str"
 
+planes_str=$(echo $xml | grep -o 'PlaneCount="[0-9]\+"')
+echo "$planes_str"
 
 echo "Updating PlaneCount to match SizeC"
 planes_str_new=${sizec_str/SizeC/PlaneCount}
 echo "New plane string: $planes_str_new"
 
 echo "Writing replacement XML"
-echo "${ome/$planes_str/$planes_str_new}" > new.ome.xml
+echo "${xml/$planes_str/$planes_str_new}"
+echo "${xml/$planes_str/$planes_str_new}" > new.ome.xml
 
 echo "Injecting replacement XML"
-tiffcomment -set 'new.ome.xml' fixed.ome.tiff
+tiffcomment -set 'new.ome.xml' 'fixed.ome.tiff'
 
 echo "Complete!"
