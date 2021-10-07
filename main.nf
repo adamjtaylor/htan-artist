@@ -79,8 +79,7 @@ process make_ometiff{
   """
   script:
   """
-  java -Xmx8g bioformats2raw
-  java -Xmx8g raw2ometiff
+  export JDK_JAVA_OPTIONS='-Xmx8g'
   bioformats2raw $input 'raw_dir' --dimension-order XYZTC
   raw2ometiff 'raw_dir' "${name}.ome.tiff"
   """
