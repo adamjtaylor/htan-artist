@@ -79,7 +79,7 @@ process make_ometiff{
   """
   script:
   """
-  bioformats2raw $input 'raw_dir' --dimension-order XYZCT
+  bioformats2raw $input 'raw_dir' --dimension-order XYZTC
   raw2ometiff 'raw_dir' "${name}.ome.tiff"
   """
 }
