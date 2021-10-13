@@ -185,7 +185,7 @@ process get_metadata{
 
 process get_contactsheet{
   label "process_low"
-  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "contactsheets$bucket$parent${name}.json"}
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "contactsheets$bucket$parent${name}.png"}
   errorStrategy params.errorStrategy
   echo params.echo
   when:
