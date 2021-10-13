@@ -191,7 +191,7 @@ process get_contactsheet{
   when:
     params.metadata == true || params.all == true
   input:
-    set parent, name, file(ome) from ome_metadata_ch
+    set parent, name, file(ome) from ome_contactsheet_ch
   output:
     file "contactsheet.png"
   stub:
