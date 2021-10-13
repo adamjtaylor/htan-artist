@@ -189,7 +189,7 @@ process get_contactsheet{
   errorStrategy params.errorStrategy
   echo params.echo
   when:
-    params.metadata == true || params.all == true
+    params.contactsheet == true || params.all == true
   input:
     set parent, name, file(ome) from ome_contactsheet_ch
   output:
