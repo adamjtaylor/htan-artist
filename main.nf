@@ -13,6 +13,7 @@ params.keepBg = false
 params.bucket = false
 params.level = -1
 params.bioformats2ometiff = true
+params.contactsheet = false
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 
@@ -86,7 +87,7 @@ process make_ometiff{
 
 ome_ch
   .mix(converted_ch)
-  .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch }
+  .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch; ome_contactsheet_ch }
 
 process make_story{
   label "process_medium"
@@ -178,6 +179,29 @@ process get_metadata{
   script:
   """
   python /image-header-validation/image-tags2json.py $ome > "tifftags.json"
+  """
+
+}
+
+process get_contactsheet{
+  label "process_low"
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "contactsheets$bucket$parent${name}.json"}
+  errorStrategy params.errorStrategy
+  echo params.echo
+  when:
+    params.metadata == true || params.all == true
+  input:
+    set parent, name, file(ome) from ome_metadata_ch
+  output:
+    file "contactsheet.png"
+  stub:
+  """
+  touch contactsheet.png
+  """
+  script:
+  """
+  wget -O make_contactsheet.py https://raw.githubusercontent.com/adamjtaylor/contactsheet/main/make_contactsheet.py
+  python make_contactsheet.py $ome --dpi 600 --level $params.level
   """
 
 }
