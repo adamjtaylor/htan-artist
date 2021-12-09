@@ -213,7 +213,7 @@ process make_story{
     if [ $METHOD = '"H&E"' ]; then 
       wget -O story.json $heStory 
     else
-        python3 /auto-minerva/story.py $ome > 'story.json'
+      python3 /auto-minerva/story.py $ome > 'story.json'
     fi
     
     """
