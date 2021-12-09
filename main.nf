@@ -195,6 +195,7 @@ process make_story{
     params.minerva == true || params.all == true
   input:
     set synid, file(ome) from ome_story_ch
+    file synapseconfig from synapseconfig
   output:
     set synid, file('story.json'), file(ome) into ome_pyramid_ch
   stub:
@@ -208,7 +209,13 @@ process make_story{
     """
   else
     """
-    python3 /auto-minerva/story.py $ome > 'story.json'
+    METHOD=$(synapse -c $synapseconfig get-annotations --id $synid | jq ".ImagingAssayType[0]")
+    if [ $METHOD = '"H&E"' ]; then 
+      wget -O story.json $heStory 
+    else
+        python3 /auto-minerva/story.py $ome > 'story.json'
+    fi
+    
     """
 }
 
@@ -243,6 +250,11 @@ process render_pyramid{
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $ome $story 'minerva'
     cp /index.html minerva
+    METHOD=$(synapse -c $synapseconfig get-annotations --id $synid | jq ".ImagingAssayType[0]")
+    if [ $METHOD = '"H&E"' ]; then 
+      wget -O fix_he_exhibit.py $heScript
+      python3 fix_he_exhibit.py minerva/exhibit.json
+    fi
     wget -O inject_description.py $minerva_description_script
     python3 inject_description.py minerva/exhibit.json --synid $synid --output minerva/exhibit.json --synapseconfig $synapseconfig
   """
