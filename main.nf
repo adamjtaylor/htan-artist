@@ -129,6 +129,8 @@ process get_annotations {
   label "process_low"
   echo params.echo
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
+  when:
+    params.metadata == true || params.all == true
   input:
     val synid from synids_togetannotations
     file synapseconfig from synapseconfig
