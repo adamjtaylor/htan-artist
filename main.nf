@@ -185,7 +185,7 @@ process make_ometiff{
 
 ome_ch
   .mix(converted_ch)
-  .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch }
+  .into { ome_story_ch; ome_miniature_ch; ome_metadata_ch; ome_metadata_ch2 }
 
 process make_story{
   label "process_medium"
@@ -287,6 +287,27 @@ process get_metadata{
   script:
   """
   python /image-header-validation/image-tags2json.py $ome > "tifftags.json"
+  """
+
+}
+
+process showinf{
+  label "process_low"
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/showinf.txt"}
+  echo params.echo
+  when:
+    params.metadata == true || params.all == true
+  input:
+    set synid, file(ome) from ome_metadata_ch2
+  output:
+    file "showinf.txt"
+  stub:
+  """
+  touch showinf.txt
+  """
+  script:
+  """
+  showinf -nopix $ome > showinf.txt
   """
 
 }
