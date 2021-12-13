@@ -293,9 +293,9 @@ process get_metadata{
 
 }
 
-process showinf{
+process get_shape{
   label "process_low"
-  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/showinf.txt"}
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/shape.tsv"}
   echo params.echo
   when:
     params.metadata == true || params.all == true
@@ -309,7 +309,8 @@ process showinf{
   """
   script:
   """
-  showinf -nopix $ome > showinf.txt
+  wget -O get_shape.py https://gist.githubusercontent.com/adamjtaylor/952a58c874414c9393f7ad704b29c89a/raw/61e59b1b5bab8fac5c675d1e93c0baa6a61b2e75/get_shape.py
+  python get_shape.py $ome > shape.tsv
   """
 
 }
