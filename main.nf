@@ -309,7 +309,7 @@ process get_shape{
   """
   script:
   """
-  wget -O get_shape.py https://gist.githubusercontent.com/adamjtaylor/952a58c874414c9393f7ad704b29c89a/raw/61e59b1b5bab8fac5c675d1e93c0baa6a61b2e75/get_shape.py
+  wget -O get_shape.py https://gist.githubusercontent.com/adamjtaylor/952a58c874414c9393f7ad704b29c89a/raw/ebf94f287c6b35cc55c97b69759be1e7b2a320a4/get_shape.py
   python get_shape.py $ome > shape.tsv
   """
 
