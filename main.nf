@@ -302,10 +302,10 @@ process get_shape{
   input:
     set synid, file(ome) from ome_metadata_ch2
   output:
-    file "showinf.txt"
+    file "shape.tsv"
   stub:
   """
-  touch showinf.txt
+  touch shape.tsv
   """
   script:
   """
