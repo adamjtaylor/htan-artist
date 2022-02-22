@@ -21,6 +21,7 @@ params.watch_file = false
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
 minerva_description_script = 'https://gist.githubusercontent.com/adamjtaylor/e51873a801fee39f1f1efa978e2b5e44/raw/c03d0e09ec58e4c391f5ce4ca4183abca790f2a2/inject_description.py'
+duke_mibi_story = 'https://raw.githubusercontent.com/adamjtaylor/auto-minerva/duke-mibi/story.py'
 
 if (params.synapseconfig != false){
   synapseconfig = file(params.synapseconfig)
@@ -208,6 +209,7 @@ process make_story{
     """
   else
     """
+    wget -O /auto-minerva/story.py $duke_mibi_story
     python3 /auto-minerva/story.py $ome > 'story.json'
     """
 }
