@@ -57,7 +57,7 @@ if (params.input_synid != false) {
 // Channel taking a single input_path (works with wildcards)
 if (params.input_path != false) {
     Channel
-        .fromPath(params.input_path)
+        .fromPath(params.input_path,checkIfExists: true)
         .into {input_path; view_path}
       view_path.view()
       print 'Input path used'
