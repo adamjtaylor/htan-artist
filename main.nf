@@ -60,8 +60,10 @@ if (params.input_path != false) {
         .fromPath(params.input_path)
         .into {input_path; view_path}
       view_path.view()
+      print 'Input path used'
 } else {
     Channel.empty().set{input_path}
+    print 'Empty input path'
 }
 
 if (params.watch_csv != false) {
