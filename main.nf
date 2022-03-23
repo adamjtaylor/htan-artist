@@ -58,7 +58,8 @@ if (params.input_synid != false) {
 if (params.input_path != false) {
     Channel
         .fromPath(params.input_path)
-        .set {input_path}
+        .into {input_path; view_path}
+    view_path.view()
 } else {
     Channel.empty().set{input_path}
 }
@@ -102,9 +103,7 @@ input_path
     .mix( watch_path )
     .map { it -> file(it) }
     .map { it -> tuple(it.simpleName, it)}
-    .into {files; view_files}
-
-view_files.view()
+    .set { files }
 
 
 process synapse_get {
