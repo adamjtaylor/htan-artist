@@ -97,8 +97,8 @@ input_synid
     .into {synids_toget; synids_togetannotations}
 
 // Mix the files
-input_csv_branch.other
-    .mix( input_path )
+input_path
+    .mix( input_csv_branch.other )
     .mix( watch_path )
     .map { it -> file(it) }
     .map { it -> tuple(it.simpleName, it)}
