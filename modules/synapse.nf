@@ -11,6 +11,7 @@ process SYNAPSE_GET {
   """
   script:
   """
-  synapse -c ~/.synapseConfig get $synid
+  echo "synapse -c $params.synapseconfig get $synid"
+  synapse -c $params.synapseconfig get $synid
   """
 }

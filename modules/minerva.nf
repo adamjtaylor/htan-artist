@@ -1,5 +1,5 @@
 
-process STORY{
+process STORY {
     label "process_medium"
     publishDir "$params.outdir/$workflow.runName"
         mode: 'copy'
@@ -27,7 +27,7 @@ process STORY{
 }
 
 
-process RENDER{
+process RENDER {
     label "process_medium"
     publishDir "$params.outdir/$workflow.runName",
         mode: 'move' 

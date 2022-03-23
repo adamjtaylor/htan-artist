@@ -20,7 +20,7 @@ params.echo = false
 params.keepBg = false
 params.level = -1
 params.bioformats2ometiff = true
-params.synapseconfig = '~/.synapseConfig'
+params.synapseconfig = '.synapseConfig'
 params.watch_file = false
 
 // Fetch scripts - BAKE THESE INTO THE DOCKER CONTAINER
@@ -34,6 +34,8 @@ if (params.synapseconfig != false){
   synapseconfig = file(params.synapseconfig)
 }
 
+print synapseconfig
+
 if(params.keepBg == false) { 
   remove_bg = true
 } else {
@@ -42,52 +44,48 @@ if(params.keepBg == false) {
 
 
 // Workflow
-include { RESIZE; MINIATUR } from './modules/minerva'
-include { STORY; RENDER } from './modules/minerva'
+include { SYNAPSE_GET } from './modules/synapse'
+//include { RESIZE; MINIATUR } from './modules/minerva'
+//include { STORY; RENDER } from './modules/minerva'
 
 
 // INPUT WORKFLOW
-
-if (params.input_csv != false) {
-  Channel
-    .fromPath(params.input_csv)
-    .splitText()
-    .set { input_csv }
-} else {
-  Channel.empty().set{input_csv}
-}
-
-if (params.input_path != false) {
-  Channel
-    .fromPath(params.input_path)
-    .set { input_path }
-} else {
-    Channel.empty().set{input_path}
-}
-
-Channel
-  .empty()
-  .mix(input_path)
-  .mix(input_csv)
-  .branch {
-    syn: it =~ /^syn\d+$/
-    paths: true
-  }
-  .set { inputs }
-
-inputs.paths
-  .map { it -> file(it) }
-  .map { it -> tuple(it.simpleName, it)}
-  .set { paths }
-
-// files.view()
-
 workflow get_images {
-    take: inputs, files
-    main:
+  if (params.input_csv != false) {
+    Channel
+      .fromPath(params.input_csv)
+      .splitText()
+      .set { input_csv }
+  } else {
+    Channel.empty().set{input_csv}
+  }
+
+  if (params.input_path != false) {
+    Channel
+      .fromPath(params.input_path)
+      .set { input_path }
+  } else {
+      Channel.empty().set{input_path}
+  }
+
+  Channel
+    .empty()
+    .mix(input_path)
+    .mix(input_csv)
+    .branch {
+      syn: it =~ /^syn\d+$/
+      paths: true
+    }
+    .set { inputs }
+
+    inputs.syn.view()
+    inputs.paths.view()
+
     SYNAPSE_GET(inputs.syn)
     
-    paths
+    inputs.paths
+      .map { it -> file(it) }
+      .map { it -> tuple(it.simpleName, it)}
       .mix(
         SYNAPSE_GET.out
       )
@@ -97,16 +95,16 @@ workflow get_images {
 }
 
 
-workflow minerva {
+//workflow minerva {
 
-  if (params.he = True) {
-    RENDER_HE( ome_pyramid_ch )
-  } else {
-    STORY( ome_pyramid_ch )
-    RENDER( STORY.out)
-  }
-
-}
+//  if (params.he = True) {
+//    RENDER_HE( ome_pyramid_ch )
+//  } else {
+//    STORY( ome_pyramid_ch )
+//    RENDER( STORY.out)
+//  }
+//
+//}
 
 //workflow thumbnail {
  // if params.he = True {
@@ -119,5 +117,4 @@ workflow minerva {
 
 workflow {
   get_images()
-
 }
