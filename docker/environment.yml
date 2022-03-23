@@ -4,6 +4,7 @@ channels:
   - ome
   - fastai
   - bioconda
+  - imagemagick
 dependencies:
   - numpy
   - Pillow

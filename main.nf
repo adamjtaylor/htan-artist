@@ -264,10 +264,16 @@ process render_miniature{
   touch data/miniature.png
   """
   script:
-  """
-  mkdir data
-  python3 /miniature/docker/paint_miniature.py $ome 'miniature.png' --remove_bg $remove_bg --level $params.level
-  """
+  if(params.he == true && params.bioformats2ometiff == false)
+    """
+    mkdir data
+    magick $ome -resize 512x512 miniature.png
+    """
+  else
+    """
+    mkdir data
+    python3 /miniature/docker/paint_miniature.py $ome 'miniature.png' --remove_bg $remove_bg --level $params.level
+    """
 }
 
 process get_metadata{
