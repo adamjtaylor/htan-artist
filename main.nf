@@ -98,8 +98,9 @@ input_synid
 
 // Mix the files
 input_csv_branch.other
-    .map { it -> file(it) }
     .mix( input_path, watch_path )
+    .mix( watch_path )
+    .map { it -> file(it) }
     .map { it -> tuple(it.simpleName, it)}
     .set {files}
 
