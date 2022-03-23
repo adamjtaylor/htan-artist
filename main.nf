@@ -57,7 +57,7 @@ if (params.input_synid != false) {
 // Channel taking a single input_path (works with wildcards)
 if (params.input_path != false) {
     Channel
-        .fromPath(params.input_path).view()
+        .fromPath(params.input_path).view() 
         //.into {input_path; view_path}
     //view_path.view()
 } else {
