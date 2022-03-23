@@ -102,7 +102,9 @@ input_path
     .mix( watch_path )
     .map { it -> file(it) }
     .map { it -> tuple(it.simpleName, it)}
-    .set {files}
+    .into {files; view_files}
+
+view_files.view()
 
 
 process synapse_get {
