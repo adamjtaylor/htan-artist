@@ -29,3 +29,4 @@ dependencies:
   - raw2ometiff
   - ome-types
   - pip
+  - imagemagick
