@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'dsl2'
 
 jobs:
   docker:
