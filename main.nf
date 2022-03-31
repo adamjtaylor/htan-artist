@@ -8,8 +8,9 @@ if (params.input) { input = file(params.input) } else { exit 1, 'Input sampleshe
 params.outdir = "outputs"
 params.remove_bg = true
 params.level = -1
-params.miniature = true
+params.miniature = false
 params.minerva = false
+params.convert = false
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -56,6 +57,7 @@ workflow CONVERT {
       }    
       .mix (bioformats2ometiff.out)
       .set {converted}
+
     emit: converted
 }
 
@@ -74,16 +76,22 @@ workflow MINERVA {
 workflow {
     SAMPLESHEET_SPLIT ( input )
     //SAMPLESHEET_SPLIT.out.images.view()
-    CONVERT( SAMPLESHEET_SPLIT.out.images )
-    if (params.minerva == true) {
-      MINERVA( CONVERT.out.converted ) 
+    if (params.convert) {
+      CONVERT( SAMPLESHEET_SPLIT.out.images )
+      CONVERT.out.converted.set{converted}
+    } else {
+      SAMPLESHEET_SPLIT.out.images.set{converted}
+    }
+    if (params.minerva) {
+      MINERVA( converted ) 
       }
-    if (params.miniature == true) {
-      make_miniature ( CONVERT.out.converted )
+    if (params.miniature) {
+      make_miniature ( converted )
     }
 }
 
 process bioformats2ometiff {
+  label "process_medium"
   input:
       tuple val(meta), file(image) 
   output:
@@ -163,8 +171,17 @@ process make_miniature {
   script:
   if ( meta.he){
     """
-    mkdir data
-    magick $image -resize 512x512 data/miniature.png
+    #!/usr/bin/env python
+
+    from tiffslide import TiffSlide
+    import matplotlib.pyplot as plt
+    import os
+
+    slide = TiffSlide('$image')
+
+    thumb = slide.get_thumbnail((512, 512))
+    os.mkdir('data')
+    thumb.save('data/miniature.png')
     """
   } else {
     """
