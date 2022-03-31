@@ -30,3 +30,5 @@ dependencies:
   - ome-types
   - pip
   - imagemagick
+  - tiffslide
+  - libvips
