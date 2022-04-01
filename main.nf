@@ -8,9 +8,7 @@ if (params.input) { input = file(params.input) } else { exit 1, 'Input sampleshe
 params.outdir = "outputs"
 params.remove_bg = true
 params.level = -1
-params.miniature = false
-params.minerva = false
-params.convert = false
+params.dimred = "umap"
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -29,8 +27,11 @@ workflow SAMPLESHEET_SPLIT {
             row -> 
             def meta = [:]
             meta.id = file(row.image).simpleName
-            meta.he = row.he.toBoolean()
             meta.ome = row.image ==~ /.+\.ome\.tif{1,2}$/
+            meta.convert = row.convert.toBoolean()
+            meta.he = row.he.toBoolean()
+            meta.miniature = row.miniature.toBoolean()
+            meta.minerva = row.minerva.toBoolean()
             image = file(row.image)
             [meta, image]
         }
@@ -45,7 +46,7 @@ workflow CONVERT {
     main:
     images
         .filter {
-            it[0].ome == false
+            it[0].convert == true
         }
         .set {bioformats}
 
@@ -53,7 +54,7 @@ workflow CONVERT {
 
     images
       .filter {
-        it[0].ome == true
+         it[0].convert == false
       }    
       .mix (bioformats2ometiff.out)
       .set {converted}
@@ -66,28 +67,36 @@ workflow MINERVA {
   converted
   
   main:
-  autominerva_story(converted)
+  converted
+    .filter {
+            it[0].minerva == true
+        }
+    .set {for_minerva }
+  autominerva_story(for_minerva)
   render_pyramid(autominerva_story.out)
+}
+
+workflow MINIATURE {
+  take:
+  converted
   
-  emit:
-  minerva = render_pyramid.out
+  main:
+  converted
+    .filter {
+            it[0].miniature == true
+        }
+    .set {for_miniature }
+  make_miniature(for_miniature)
+
 }
 
 workflow {
     SAMPLESHEET_SPLIT ( input )
     //SAMPLESHEET_SPLIT.out.images.view()
-    if (params.convert) {
-      CONVERT( SAMPLESHEET_SPLIT.out.images )
-      CONVERT.out.converted.set{converted}
-    } else {
-      SAMPLESHEET_SPLIT.out.images.set{converted}
-    }
-    if (params.minerva) {
-      MINERVA( converted ) 
-      }
-    if (params.miniature) {
-      make_miniature ( converted )
-    }
+    CONVERT( SAMPLESHEET_SPLIT.out.images )
+    CONVERT.out.converted.set{converted}
+    MINERVA( converted ) 
+    MINIATURE( converted )
 }
 
 process bioformats2ometiff {
@@ -160,7 +169,7 @@ process make_miniature {
   input:
       tuple val(meta), file(image) 
   output:
-      tuple val(meta), file('data/miniature.png'), emit: thumbnail
+      tuple val(meta), file('data/miniature.png')
   publishDir "$params.outdir/$workflow.runName",
     saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.png"}
   stub:
@@ -186,7 +195,11 @@ process make_miniature {
   } else {
     """
     mkdir data
-    python3 /miniature/docker/paint_miniature.py $image 'miniature.png' --remove_bg $params.remove_bg --level $params.level
+    python3 /miniature/docker/paint_miniature.py \
+      $image 'miniature.png' \
+      --remove_bg $params.remove_bg \
+      --level $params.level \
+      --dimred $params.dimred
     """
   }
 }
