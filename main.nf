@@ -102,11 +102,9 @@ input_csv_branch.other
 process synapse_get {
   label "process_low"
   echo params.echo
-  when:
-    params.synapseconfig != false
+  secret 'SYNAPSE_AUTH_TOKEN'
   input:
     val synid from synids_toget
-    file synapseconfig from synapseconfig
   output:
     set synid, file('*') into syn_out
   stub:
@@ -115,18 +113,18 @@ process synapse_get {
   """
   script:
     """
-    echo "synapse -c $synapseconfig get $synid"
-    synapse -c $synapseconfig get $synid
+    echo "synapse get $synid"
+    synapse get $synid
     """
 }
 
 process get_annotations {
   label "process_low"
   echo params.echo
+  secret 'SYNAPSE_AUTH_TOKEN'
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
   input:
     val synid from synids_togetannotations
-    file synapseconfig from synapseconfig
   output:
     file 'annotations.json'
   stub:
@@ -135,8 +133,8 @@ process get_annotations {
   """
   script:
     """
-    echo "synapse -c $synapseconfig get-annotations --id $synid"
-    synapse -c $synapseconfig get-annotations --id $synid > annotations.json
+    echo "synapse get-annotations --id $synid"
+    synapse get-annotations --id $synid > annotations.json
     """
 }
 
@@ -211,7 +209,8 @@ process render_pyramid{
   label "process_medium"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/minerva/"}
   echo params.echo
-   when:
+  secret 'SYNAPSE_AUTH_TOKEN'
+  when:
     params.minerva == true || params.all == true
   input:
     set synid, file(story), file(ome) from ome_pyramid_ch
@@ -231,7 +230,7 @@ process render_pyramid{
     wget -O fix_he_exhibit.py $heScript
     python3 fix_he_exhibit.py minerva/exhibit.json
     wget -O inject_description.py $minerva_description_script
-    python3 inject_description.py minerva/exhibit.json -synid$synid
+    python3 inject_description.py minerva/exhibit.json -synid $synid
     """
   else
     """
