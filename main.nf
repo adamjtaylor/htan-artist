@@ -108,8 +108,6 @@ process synapse_get {
   label "process_low"
   echo params.echo
   secret 'SYNAPSE_AUTH_TOKEN'
- \\ when:
- \\   params.synapseconfig != false
   input:
     val synid from synids_toget
   output:
@@ -132,7 +130,6 @@ process get_annotations {
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
   input:
     val synid from synids_togetannotations
-  \\  file synapseconfig from synapseconfig
   output:
     file 'annotations.json'
   stub:
