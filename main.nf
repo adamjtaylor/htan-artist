@@ -11,7 +11,7 @@ params.input_synid = false
 params.input_path = false
 params.watch_path = false
 params.watch_csv = false
-params.echo = false
+params.debug = false
 params.keepBg = false
 params.level = -1
 params.bioformats2ometiff = true
@@ -105,7 +105,7 @@ input_csv_branch.other
 
 process synapse_get {
   label "process_low"
-  echo params.echo
+  debug params.debug
   secret 'SYNAPSE_AUTH_TOKEN'
   input:
     val synid from synids_toget
@@ -117,14 +117,14 @@ process synapse_get {
   """
   script:
     """
-    echo "synapse get $synid"
+    debug "synapse get $synid"
     synapse get $synid
     """
 }
 
 process get_annotations {
   label "process_low"
-  echo params.echo
+  debug params.debug
   secret 'SYNAPSE_AUTH_TOKEN'
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
   input:
@@ -137,7 +137,7 @@ process get_annotations {
   """
   script:
     """
-    echo "synapse get-annotations --id $synid"
+    debug "synapse get-annotations --id $synid"
     synapse get-annotations --id $synid > annotations.json
     """
 }
@@ -154,16 +154,16 @@ input_groups.ome
 //  .map { file -> tuple(file.parent, file.simpleName, file) }
   .into {ome_ch; ome_view_ch}
 
-if (params.echo) {  ome_view_ch.view { "$it is an ometiff" } }
+if (params.debug) {  ome_view_ch.view { "$it is an ometiff" } }
 
 input_groups.other
   .into {bf_convert_ch; bf_view_ch}
 
-if (params.echo) {  bf_view_ch.view { "$it is NOT an ometiff" } }
+if (params.debug) {  bf_view_ch.view { "$it is NOT an ometiff" } }
 
 process make_ometiff{
   label "process_medium"
-  echo params.echo
+  debug params.debug
   input:
     set synid, file(input) from bf_convert_ch
   output:
@@ -187,7 +187,7 @@ ome_ch
 process make_story{
   label "process_medium"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/minerva/story.json"}, pattern: "story.json"
-  echo params.echo
+  debug params.debug
   when:
     params.minerva == true || params.all == true
   input:
@@ -212,7 +212,7 @@ process make_story{
 process render_pyramid{
   label "process_medium"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/minerva/"}
-  echo params.echo
+  debug params.debug
   secret 'SYNAPSE_AUTH_TOKEN'
   when:
     params.minerva == true || params.all == true
@@ -248,7 +248,7 @@ process render_pyramid{
 process render_miniature{
   label "process_high"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.jpg"}
-  echo params.echo
+  debug params.debug
   when:
     params.miniature == true || params.all == true
   input:
@@ -271,7 +271,7 @@ process render_miniature{
 process get_metadata{
   label "process_low"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/headers.json"}
-  echo params.echo
+  debug params.debug
   when:
     params.metadata == true || params.all == true
   input:
