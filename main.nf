@@ -16,6 +16,10 @@ params.keepBg = false
 params.level = -1
 params.bioformats2ometiff = true
 params.watch_file = false
+params.thumbnail_width = 256
+params.thumbnail_sharpen = 20
+params.thumbnail_quality = 75
+
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -244,23 +248,24 @@ process render_pyramid{
 
 process render_miniature{
   label "process_high"
-  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.png"}
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.jpg"}
   echo params.echo
   when:
     params.miniature == true || params.all == true
   input:
     set synid, file(ome) from ome_miniature_ch
   output:
-    file 'data/miniature.png'
+    file 'data/miniature.jpg'
   stub:
   """
   mkdir data
-  touch data/miniature.png
+  touch data/miniature.jpg
   """
   script:
   """
   mkdir data
   python3 /miniature/docker/paint_miniature.py $ome 'miniature.png' --remove_bg $remove_bg --level $params.level
+  convert data/miniature.png  -colorspace RGB -sharpen 20 -resize '$params.thumbnail_width>' -sharpen $params.thumbnail_sharpen -colorspace sRGB -quality $params.thumbnail_quality data/miniature.jpg
   """
 }
 
