@@ -234,7 +234,7 @@ process render_pyramid{
     wget -O fix_he_exhibit.py $heScript
     python3 fix_he_exhibit.py minerva/exhibit.json
     wget -O inject_description.py $minerva_description_script
-    python3 inject_description.py minerva/exhibit.json -synid $synid
+    python3 inject_description.py minerva/exhibit.json --synid $synid
     """
   else
     """
