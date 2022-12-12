@@ -16,6 +16,10 @@ params.keepBg = false
 params.level = -1
 params.bioformats2ometiff = true
 params.watch_file = false
+params.thumbnail_width = 256
+params.thumbnail_sharpen = 20
+params.thumbnail_quality = 75
+
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -101,12 +105,10 @@ input_csv_branch.other
 
 process synapse_get {
   label "process_low"
-  echo params.echo
-  when:
-    params.synapseconfig != false
+  debug params.echo
+  secret 'SYNAPSE_AUTH_TOKEN'
   input:
     val synid from synids_toget
-    file synapseconfig from synapseconfig
   output:
     set synid, file('*') into syn_out
   stub:
@@ -115,18 +117,18 @@ process synapse_get {
   """
   script:
     """
-    echo "synapse -c $synapseconfig get $synid"
-    synapse -c $synapseconfig get $synid
+    echo "synapse get $synid"
+    synapse get $synid
     """
 }
 
 process get_annotations {
   label "process_low"
-  echo params.echo
+  debug params.echo
+  secret 'SYNAPSE_AUTH_TOKEN'
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
   input:
     val synid from synids_togetannotations
-    file synapseconfig from synapseconfig
   output:
     file 'annotations.json'
   stub:
@@ -135,8 +137,8 @@ process get_annotations {
   """
   script:
     """
-    echo "synapse -c $synapseconfig get-annotations --id $synid"
-    synapse -c $synapseconfig get-annotations --id $synid > annotations.json
+    echo "synapse get-annotations --id $synid"
+    synapse get-annotations --id $synid > annotations.json
     """
 }
 
@@ -161,7 +163,7 @@ if (params.echo) {  bf_view_ch.view { "$it is NOT an ometiff" } }
 
 process make_ometiff{
   label "process_medium"
-  echo params.echo
+  debug params.echo
   input:
     set synid, file(input) from bf_convert_ch
   output:
@@ -185,7 +187,7 @@ ome_ch
 process make_story{
   label "process_medium"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/minerva/story.json"}, pattern: "story.json"
-  echo params.echo
+  debug params.echo
   when:
     params.minerva == true || params.all == true
   input:
@@ -210,8 +212,9 @@ process make_story{
 process render_pyramid{
   label "process_medium"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/minerva/"}
-  echo params.echo
-   when:
+  debug params.echo
+  secret 'SYNAPSE_AUTH_TOKEN'
+  when:
     params.minerva == true || params.all == true
   input:
     set synid, file(story), file(ome) from ome_pyramid_ch
@@ -231,7 +234,7 @@ process render_pyramid{
     wget -O fix_he_exhibit.py $heScript
     python3 fix_he_exhibit.py minerva/exhibit.json
     wget -O inject_description.py $minerva_description_script
-    python3 inject_description.py minerva/exhibit.json -synid$synid
+    python3 inject_description.py minerva/exhibit.json --synid $synid
     """
   else
     """
@@ -244,30 +247,31 @@ process render_pyramid{
 
 process render_miniature{
   label "process_high"
-  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.png"}
-  echo params.echo
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.jpg"}
+  debug params.echo
   when:
     params.miniature == true || params.all == true
   input:
     set synid, file(ome) from ome_miniature_ch
   output:
-    file 'data/miniature.png'
+    file 'data/miniature.jpg'
   stub:
   """
   mkdir data
-  touch data/miniature.png
+  touch data/miniature.jpg
   """
   script:
   """
   mkdir data
   python3 /miniature/docker/paint_miniature.py $ome 'miniature.png' --remove_bg $remove_bg --level $params.level
+  convert data/miniature.png  -colorspace RGB -sharpen 20 -resize '$params.thumbnail_width>' -sharpen $params.thumbnail_sharpen -colorspace sRGB -quality $params.thumbnail_quality data/miniature.jpg
   """
 }
 
 process get_metadata{
   label "process_low"
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/headers.json"}
-  echo params.echo
+  debug params.echo
   when:
     params.metadata == true || params.all == true
   input:
