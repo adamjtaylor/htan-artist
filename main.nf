@@ -178,14 +178,14 @@ process make_ometiff{
   if(params.fix_svs_photochromicinterpretation == true)
   """
   IFDS=`tiffinfo $input | grep "TIFF Directory" | wc -l`
-  echo "Processing $IFDS IFDs..."
+  echo "Processing \$IFDS IFDs..."
 
   # loop over each image to fix the color handling
   let i=0
-  while [ $i -lt $(($IFDS)) ]
+  while [ \$i -lt \$((\$IFDS)) ]
   do
     # change the PhotometricInterpretation tag (262) to RGB (2) for every IFD
-    tiffset -d $i -s 262 2 $input
+    tiffset -d \$i -s 262 2 $input
     ((i++))
   done
   bioformats2raw $input 'raw_dir'
