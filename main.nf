@@ -185,9 +185,11 @@ process make_ometiff{
   while [ \$i -lt \$((\$IFDS)) ]
   do
     # change the PhotometricInterpretation tag (262) to RGB (2) for every IFD
+    echo "Changing the PhotometricInterpretation tag (262) to RGB (2) for IFD \$i"
     tiffset -d \$i -s 262 2 $input
     ((i++))
   done
+  echo "Colors resert. Starting OME-TIFF conversion"
   bioformats2raw $input 'raw_dir'
   raw2ometiff 'raw_dir' "${input.simpleName}.ome.tiff"
   """
