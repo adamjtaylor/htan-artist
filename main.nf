@@ -19,6 +19,7 @@ params.watch_file = false
 params.thumbnail_width = 256
 params.thumbnail_sharpen = 20
 params.thumbnail_quality = 75
+params.fix_svs_photochromicinterpretation = false
 
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
@@ -174,6 +175,23 @@ process make_ometiff{
   touch "test.ome.tiff"
   """
   script:
+  if(params.fix_svs_photochromicinterpretation == true)
+  """
+  IFDS=`tiffinfo $input | grep "TIFF Directory" | wc -l`
+  echo "Processing $IFDS IFDs..."
+
+  # loop over each image to fix the color handling
+  let i=0
+  while [ $i -lt $(($IFDS)) ]
+  do
+    # change the PhotometricInterpretation tag (262) to RGB (2) for every IFD
+    tiffset -d $i -s 262 2 $input
+    ((i++))
+  done
+  bioformats2raw $input 'raw_dir'
+  raw2ometiff 'raw_dir' "${input.simpleName}.ome.tiff"
+  """
+  else
   """
   bioformats2raw $input 'raw_dir'
   raw2ometiff 'raw_dir' "${input.simpleName}.ome.tiff"
