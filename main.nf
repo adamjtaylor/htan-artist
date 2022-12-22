@@ -177,19 +177,7 @@ process make_ometiff{
   script:
   if(params.fix_svs_photochromicinterpretation == true)
   """
-  IFDS=`tiffinfo $input | grep "TIFF Directory" | wc -l`
-  echo "Processing \$IFDS IFDs..."
-
-  # loop over each image to fix the color handling
-  let i=0
-  while [ \$i -lt \$((\$IFDS)) ]
-  do
-    # change the PhotometricInterpretation tag (262) to RGB (2) for every IFD
-    echo "Changing the PhotometricInterpretation tag (262) to RGB (2) for IFD \$i"
-    tiffset -d \$i -s 262 2 $input
-    ((i++))
-  done
-  echo "Colors resert. Starting OME-TIFF conversion"
+  bash svs-fix-colors.sh $input
   bioformats2raw $input 'raw_dir'
   raw2ometiff 'raw_dir' "${input.simpleName}.ome.tiff"
   """
