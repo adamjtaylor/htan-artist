@@ -126,6 +126,8 @@ process get_annotations {
   label "process_low"
   debug params.echo
   secret 'SYNAPSE_AUTH_TOKEN'
+  when:
+    params.metadata == true || params.all == true
   publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/annotations.json"}
   input:
     val synid from synids_togetannotations
