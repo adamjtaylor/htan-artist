@@ -249,24 +249,45 @@ process render_pyramid{
 
 process render_miniature{
   label "process_high"
-  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.jpg"}
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.png"}
   debug params.echo
   when:
     params.miniature == true || params.all == true
   input:
     set synid, file(ome) from ome_miniature_ch
   output:
-    file 'data/miniature.jpg'
+    set synid, file('data/miniature.png') into miniature_output_ch
   stub:
   """
   mkdir data
-  touch data/miniature.jpg
+  touch data/miniature.png
   """
   script:
   """
   mkdir data
   python3 /miniature/docker/paint_miniature.py $ome 'miniature.png' --remove_bg $remove_bg --level $params.level
-  convert data/miniature.png  -colorspace RGB -sharpen 20 -resize '$params.thumbnail_width>' -sharpen $params.thumbnail_sharpen -colorspace sRGB -quality $params.thumbnail_quality data/miniature.jpg
+  """
+}
+
+process resize{
+  label "process_mid"
+  publishDir "$params.outdir/$workflow.runName", saveAs: {filename -> "${synid}/$workflow.runName/thumbnail.jpg"}
+  when:
+    params.miniature == true || params.all == true
+  input:
+    set synid, file(input) from miniature_output_ch
+  output:
+    file 'thumbnail.jpg'
+  script:
+  """
+  convert $input  \
+    -colorspace RGB \
+    -sharpen 20 \
+    -resize '$params.thumbnail_width>' \
+    -sharpen $params.thumbnail_sharpen \
+    -colorspace sRGB \
+    -quality $params.thumbnail_quality 
+    data/miniature.jpg
   """
 }
 
