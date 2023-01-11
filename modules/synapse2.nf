@@ -12,6 +12,8 @@ params.thumbnail_quality = 85
 params.remove_bg = true
 params.level = -1
 params.dimred = 'umap'
+heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
+
 
 
 workflow SYNAPSE {
@@ -90,11 +92,22 @@ workflow THUMBNAIL {
 
 }
 
+workflow MINERVA {
+  take:
+  converted
+  
+  main:
+
+  autominerva_story(converted)
+  render_pyramid(autominerva_story.out)
+}
+
 
 workflow {
-    SYNAPSE ( Channel.from('syn50697602', 'syn50697706', 'syn50697598', 'syn32596117') )
+    SYNAPSE ( Channel.from('syn27056837','syn24829433') )
     CONVERT ( SYNAPSE.out)
     THUMBNAIL ( CONVERT.out )
+    MINERVA ( CONVERT.out )
 }
 
 
@@ -250,4 +263,50 @@ process make_thumbnail {
     -quality $params.thumbnail_quality \\
     miniature.jpg
   """
+}
+
+
+process autominerva_story {
+  errorStrategy 'ignore'
+  input:
+      tuple val(meta), file(image) 
+  output:
+      tuple val(meta), file(image), file('story.json')
+  publishDir "$params.outdir/$workflow.runName",
+    saveAs: {filename -> "${meta.id}/$workflow.runName/story.json"}
+  stub: 
+  """
+  touch story.json
+  """
+  script:
+  if (meta.h_and_e) {
+    """
+    wget -O story.json $heStory
+    """
+  } else {
+    """
+    python3 /auto-minerva/story.py $image > 'story.json'
+    """
+  }
+}
+
+process render_pyramid {
+  input:
+      tuple val(meta), file(image), file (story)
+  output:
+      tuple val(meta), path('minerva')
+  publishDir "$params.outdir/$workflow.runName",
+    saveAs: {filename -> "${meta.id}/$workflow.runName/minerva"}
+  stub:
+  """
+  mkdir minerva
+  touch minerva/tile1.png
+  touch minerva/author.json
+  touch minerva/index.html
+  """
+  script:
+    """
+    python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
+    cp /index.html minerva
+    """
 }
