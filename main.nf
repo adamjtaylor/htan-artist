@@ -175,7 +175,7 @@ process make_ometiff{
   """
   script:
   """
-  export JAVA_OPTS="-Xms2g -Xmx8g" 
+  export JAVA_OPTS="-Xms10g -Xmx25g" 
   bioformats2raw $input 'raw_dir'
   raw2ometiff 'raw_dir' "${input.simpleName}.ome.tiff"
   """
