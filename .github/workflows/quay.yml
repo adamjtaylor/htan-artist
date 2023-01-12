@@ -16,7 +16,7 @@ jobs:
 
     - name: Build Image
       id: build-image
-      uses: redhat-actions/buildah-build@v2
+      uses: redhat-actions/buildah-build@v2.11
       with:
         image: htan-artist
         tags: latest ${{ github.sha }}
