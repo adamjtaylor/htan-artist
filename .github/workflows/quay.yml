@@ -1,0 +1,39 @@
+name: Build and Push Image
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dsl2'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and push image to quay.io
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: htan-artist
+        tags: latest ${{ github.sha }}
+        containerfiles: |
+          ./docker
+
+    # Podman Login action (https://github.com/redhat-actions/podman-login) also be used to log in,
+    # in which case 'username' and 'password' can be omitted.
+    - name: Push To quay.io
+      id: push-to-quay
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: quay.io/adamjtaylor
+        username: adamjtaylor
+        password: ${{ secrets.QUAY_PASSWORD }}
+
+    - name: Print image url
+      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
