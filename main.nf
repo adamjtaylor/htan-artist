@@ -195,7 +195,6 @@ process make_miniature {
     """
     python3 /miniature/bin/paint_miniature.py \
       $image 'miniature.png' \
-      #--remove_bg $params.remove_bg \
       --level $params.level \
       --dimred $params.dimred \
       --colormap UCIE \
