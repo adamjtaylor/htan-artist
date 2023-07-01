@@ -169,7 +169,7 @@ process make_miniature {
   input:
       tuple val(meta), file(image) 
   output:
-      tuple val(meta), file('data/miniature.png')
+      tuple val(meta), file('miniature.png')
   publishDir "$params.outdir/$workflow.runName",
     saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.png"}
   stub:
@@ -189,12 +189,10 @@ process make_miniature {
     slide = TiffSlide('$image')
 
     thumb = slide.get_thumbnail((512, 512))
-    os.mkdir('data')
-    thumb.save('data/miniature.png')
+    thumb.save('miniature.png')
     """
   } else {
     """
-    mkdir data
     python3 /miniature/bin/paint_miniature.py \
       $image 'miniature.png' \
       #--remove_bg $params.remove_bg \
