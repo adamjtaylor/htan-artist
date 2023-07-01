@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     libblosc1
 
 RUN source /venv/bin/activate && \
-    git clone https://github.com/adamjtaylor/miniature.git && \
+    git clone https://github.com/adamjtaylor/miniature.gitv -b v2 && \
     #git clone https://github.com/jmuhlich/auto-minerva.git && \
     git clone https://github.com/adamjtaylor/auto-minerva.git -b duke-mibi && \
     git clone https://github.com/labsyspharm/minerva-author.git && \
