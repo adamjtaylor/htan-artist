@@ -32,3 +32,4 @@ dependencies:
   - imagemagick
   - tiffslide
   - libvips
+  - estimagic
