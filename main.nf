@@ -195,7 +195,7 @@ process make_miniature {
   } else {
     """
     mkdir data
-    python3 /miniature/docker/paint_miniature.py \
+    python3 /miniature/bin/paint_miniature.py \
       $image 'miniature.png' \
       --remove_bg $params.remove_bg \
       --level $params.level \
