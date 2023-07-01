@@ -9,6 +9,8 @@ params.outdir = "outputs"
 params.remove_bg = true
 params.level = -1
 params.dimred = "umap"
+params.colormap = "UCIE"
+params.n_components = 3
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -197,8 +199,8 @@ process make_miniature {
       $image 'miniature.png' \
       --level $params.level \
       --dimred $params.dimred \
-      --colormap UCIE \
-      --n_components 3
+      --colormap $params.colormap \
+      --n_components $params.n_components
     """
   }
 }
