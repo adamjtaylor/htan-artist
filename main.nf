@@ -199,8 +199,8 @@ process make_miniature {
       $image 'miniature.png' \
       --remove_bg $params.remove_bg \
       --level $params.level \
-      --dimred $params.dimred
-      --colormap UCIE
+      --dimred $params.dimred \
+      --colormap UCIE \
       --n_components 3
     """
   }
