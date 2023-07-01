@@ -57,7 +57,8 @@ RUN source /venv/bin/activate && \
     pip install git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib && \
     pip install openslide-python && \
     pip install opencv-python-headless \
-    pip install synapseclient
+    pip install synapseclient \
+    pip install mantel
 
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
