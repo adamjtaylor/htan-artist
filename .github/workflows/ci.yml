@@ -6,7 +6,7 @@ on:
       - 'main'
       - 'dsl2'
     paths:
-     - docker
+     - 'docker/**'
 
 jobs:
   docker:
