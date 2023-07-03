@@ -165,7 +165,6 @@ process render_pyramid {
 
 
 process make_miniature {
-  echo true
   label "process_medium"
   input:
       tuple val(meta), file(image) 
