@@ -35,7 +35,7 @@ dependencies:
   - pip:
     - ome-types
     - openslide-python
-    - opencv-python-headles
+    - opencv-python-headless
     - synapseclient
     - mantel
     - minerva-lib
