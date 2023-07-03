@@ -120,7 +120,6 @@ process bioformats2ometiff {
 }
 
 process autominerva_story {
-  errorStrategy 'ignore'
   input:
       tuple val(meta), file(image) 
   output:
