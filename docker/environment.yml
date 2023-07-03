@@ -33,4 +33,9 @@ dependencies:
   - libvips
   - estimagic
   - pip:
-    ome-types
+    - ome-types
+    - openslide-python
+    - opencv-python-headles
+    - synapseclient
+    - mantel
+    - minerva-lib
