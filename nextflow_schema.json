@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/Sage-Bionetworks-Workflows/nf-artist/dsl2/nextflow_schema.json",
+    "title": "Sage-Bionetworks-Workflows/nf-artist parameters",
+    "description": "Nextflow pipeline for GENIE BPC processing",
+    "type": "object",
+    "definitions": {
+        "parameters": {
+            "title": "Input options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define HTAN Artist pipeline parameters.",
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "description": "Path to a file with a file path, uid, or synapseID per row"
+                },
+                "outdir": {
+                    "type": "string",
+                    "description": "Description for this cohort run of the BPC pipeline",
+                    "default": "NSCLC public release update"
+                },
+                "remove_bg": {
+                    "type": "boolean",
+                    "description": "Whether to Keep the background in thumbnails",
+                    "default": true,
+                    "enum": [
+                        true,
+                        false
+                    ]
+                },
+                "level": {
+                    "type": "integer",
+                    "description": "the pyramid level used in thumbnauls, Default: -1 (highest)",
+                    "default": -1
+                },
+                "dimred": {
+                    "type": "string",
+                    "description": "",
+                    "default": "umap"
+                },
+                "colormap": {
+                    "type": "boolean",
+                    "description": "",
+                    "default": "UCIE"
+                },
+                "n_components": {
+                    "type": "integer",
+                    "description": "",
+                    "default": 3
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/parameters"
+        }
+    ]
+}
