@@ -42,7 +42,7 @@
                     "default": "umap"
                 },
                 "colormap": {
-                    "type": "boolean",
+                    "type": "string",
                     "description": "",
                     "default": "UCIE"
                 },
