@@ -13,6 +13,8 @@
             "properties": {
                 "input": {
                     "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
                     "description": "Path to a file with a file path, uid, or synapseID per row"
                 },
                 "outdir": {
