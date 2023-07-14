@@ -27,8 +27,8 @@ dependencies:
   - h5py
   - bioformats2raw=0.4.0
   - raw2ometiff
-  - ome-types
   - pip
   - imagemagick
   - tiffslide
   - libvips
+  - estimagic

@@ -5,6 +5,8 @@ on:
     branches:
       - 'main'
       - 'dsl2'
+    paths:
+     - 'docker/**'
 
 jobs:
   docker:

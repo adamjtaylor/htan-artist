@@ -5,7 +5,7 @@
 FROM continuumio/miniconda3 AS build
 
 # File Author / Maintainer
-MAINTAINER Adam Taylor <adam.taylor@sagebase.org>
+LABEL maintainer="Adam Taylor <adam.taylor@sagebase.org>"
 
 # Install the package as normal:
 COPY environment.yml .
@@ -48,16 +48,20 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     libblosc1
 
 RUN source /venv/bin/activate && \
-    git clone https://github.com/adamjtaylor/miniature.git && \
+    #git clone https://github.com/adamjtaylor/miniature.git && \
+    git clone https://github.com/adamjtaylor/miniature.git -b v2 && \
     #git clone https://github.com/jmuhlich/auto-minerva.git && \
-    git clone https://github.com/adamjtaylor/auto-minerva.git -b duke-mibi && \
-    git clone https://github.com/labsyspharm/minerva-author.git && \
+    git clone https://github.com/adamjtaylor/auto-minerva.git -b minerva1point5 && \
+    git clone https://github.com/labsyspharm/minerva-author.git minerva-author-dev && \
+    git clone https://github.com/labsyspharm/minerva-author.git -b v1.11.2 &&  \
     git clone https://github.com/ncihtan/image-header-validation && \
     wget https://gist.githubusercontent.com/adamjtaylor/964e206bf1e6f302f6e512082e953193/raw/0acdea0736a027a260a0bb598f619552ff106758/index.html && \
     pip install git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib && \
     pip install openslide-python && \
     pip install opencv-python-headless \
-    pip install synapseclient
+    pip install synapseclient \
+    pip install mantel \
+    pip install ome_types
 
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"

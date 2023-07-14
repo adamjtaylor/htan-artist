@@ -9,6 +9,8 @@ params.outdir = "outputs"
 params.remove_bg = true
 params.level = -1
 params.dimred = "umap"
+params.colormap = "UCIE"
+params.n_components = 3
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -118,7 +120,6 @@ process bioformats2ometiff {
 }
 
 process autominerva_story {
-  errorStrategy 'ignore'
   input:
       tuple val(meta), file(image) 
   output:
@@ -164,18 +165,17 @@ process render_pyramid {
 
 
 process make_miniature {
-  echo true
   label "process_medium"
   input:
       tuple val(meta), file(image) 
   output:
-      tuple val(meta), file('data/miniature.png')
+      tuple val(meta), file('miniature.jpg')
   publishDir "$params.outdir/$workflow.runName",
-    saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.png"}
+    saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.jpg"}
   stub:
   """
   mkdir data
-  touch data/miniature.png
+  touch data/miniature.jpg
   """
   script:
   if ( meta.he){
@@ -189,17 +189,16 @@ process make_miniature {
     slide = TiffSlide('$image')
 
     thumb = slide.get_thumbnail((512, 512))
-    os.mkdir('data')
-    thumb.save('data/miniature.png')
+    thumb.save('miniature.jpg')
     """
   } else {
     """
-    mkdir data
-    python3 /miniature/docker/paint_miniature.py \
-      $image 'miniature.png' \
-      --remove_bg $params.remove_bg \
+    python3 /miniature/bin/paint_miniature.py \
+      $image 'miniature.jpg' \
       --level $params.level \
-      --dimred $params.dimred
+      --dimred $params.dimred \
+      --colormap $params.colormap \
+      --n_components $params.n_components
     """
   }
 }
