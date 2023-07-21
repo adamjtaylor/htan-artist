@@ -159,13 +159,13 @@ process render_pyramid {
   touch minerva/index.html
   """
   script:
-  if (params.minerva_version == 'main' && meta.he)
+  if (params.minerva_version == 'main' && !meta.he)
     """
     python3  /minerva-author-dev/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     """
 
-  else if (meta.he = true)
+  else if (meta.he)
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
