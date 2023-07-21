@@ -157,6 +157,7 @@ process render_pyramid {
   touch minerva/tile1.png
   touch minerva/author.json
   touch minerva/index.html
+  """
   script:
   if (params.minerva_version == 'main') {
     """
