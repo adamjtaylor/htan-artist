@@ -159,26 +159,26 @@ process render_pyramid {
   touch minerva/index.html
   """
   script:
-  if (params.minerva_version == 'main' && meta.he = false) {
+  if (params.minerva_version == 'main' && meta.he = false)
     """
     python3  /minerva-author-dev/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     """
-  }
-  else if (meta.he = true) {
+
+  else if (meta.he = true)
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     wget -O fix_he_exhibit.py $heScript
     python3 fix_he_exhibit.py minerva/exhibit.json
     """
-  }
-  else {
+
+  else
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     """
-  }
+
 }
 
 
