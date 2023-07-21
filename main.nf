@@ -11,6 +11,7 @@ params.level = -1
 params.dimred = "umap"
 params.colormap = "UCIE"
 params.n_components = 3
+params.minerva_version = 'v1.11.2'
 
 heStory = 'https://gist.githubusercontent.com/adamjtaylor/3494d806563d71c34c3ab45d75794dde/raw/d72e922bc8be3298ebe8717ad2b95eef26e0837b/unscaled.story.json'
 heScript = 'https://gist.githubusercontent.com/adamjtaylor/bbadf5aa4beef9aa1d1a50d76e2c5bec/raw/1f6e79ab94419e27988777343fa2c345a18c5b1b/fix_he_exhibit.py'
@@ -156,12 +157,18 @@ process render_pyramid {
   touch minerva/tile1.png
   touch minerva/author.json
   touch minerva/index.html
-  """
   script:
+  if (params.minerva_version == 'main') {
+    """
+    python3  /minerva-author-dev/src/save_exhibit_pyramid.py $image $story 'minerva'
+    cp /index.html minerva
+    """
+  else {
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     """
+  }
 }
 
 
