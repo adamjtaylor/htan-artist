@@ -163,6 +163,7 @@ process render_pyramid {
     python3  /minerva-author-dev/src/save_exhibit_pyramid.py $image $story 'minerva'
     cp /index.html minerva
     """
+  }
   else {
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
