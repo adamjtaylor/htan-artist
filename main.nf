@@ -165,6 +165,14 @@ process render_pyramid {
     cp /index.html minerva
     """
   }
+  else if (meta.he = true) {
+    """
+    python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
+    cp /index.html minerva
+    wget -O fix_he_exhibit.py $heScript
+    python3 fix_he_exhibit.py minerva/exhibit.json
+    """
+  }
   else {
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
