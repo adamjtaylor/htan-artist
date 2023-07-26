@@ -4,6 +4,7 @@ process autominerva_story {
   output:
       tuple val(meta), file(image), file('story.json')
   publishDir "$params.outdir/$workflow.runName",
+    pattern: 'story.json',
     saveAs: {filename -> "${meta.id}/$workflow.runName/story.json"}
   stub: 
   """
