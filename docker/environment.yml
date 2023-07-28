@@ -5,7 +5,7 @@ channels:
   - fastai
   - bioconda
 dependencies:
-  - numpy
+  - numpy=1.23.0
   - Pillow
   - flask
   - waitress
@@ -27,5 +27,8 @@ dependencies:
   - h5py
   - bioformats2raw=0.4.0
   - raw2ometiff
-  - ome-types
   - pip
+  - imagemagick
+  - tiffslide
+  - libvips
+  - estimagic
