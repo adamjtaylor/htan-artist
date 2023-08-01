@@ -29,6 +29,6 @@ dependencies:
   - raw2ometiff
   - pip
   - imagemagick
-  - tiffslide
+  - tiffslide=2.1.2
   - libvips
   - estimagic
