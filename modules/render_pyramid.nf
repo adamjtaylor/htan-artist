@@ -3,7 +3,7 @@ process render_pyramid {
       tuple val(meta), file(image), file (story)
   output:
       tuple val(meta), path('minerva')
-  publishDir "$params.outdir/$workflow.runName",
+  publishDir "$params.outdir",
     saveAs: {filename -> "${meta.id}/minerva"}
   stub:
   """

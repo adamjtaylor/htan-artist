@@ -29,7 +29,7 @@ process STORY {
 
 process RENDER {
     label "process_medium"
-    publishDir "$params.outdir/$workflow.runName",
+    publishDir "$params.outdir",
         mode: 'move' 
     
     echo params.echo
