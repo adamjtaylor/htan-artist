@@ -22,9 +22,9 @@ nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input_path <path-to-
 
 `--outdir` - output directory. Default: `.`  
 `--minerva`: Renders an [Auto-Minerva](https://github.com/jmuhlich/auto-minerva) story  
-`--miniature` - Renders a thumbnail image using [Miniature](https://github.com/adamjtaylor/miniature)   
-`--metadata` -  Extract headers from the image and save as a json  
-`--all` - set `--minerva` `--miniature` and `--metadata`   
+`--miniature` - Renders a thumbnail image using [Miniature](https://github.com/adamjtaylor/miniature)  
+`--metadata` - Extract headers from the image and save as a json  
+`--all` - set `--minerva` `--miniature` and `--metadata`  
 `--he` - Use an unscaled scene for Minerva story and thumbnail generation. Suitable for H&E images  
 `--input_csv` - Path to a csv with a file path, uid, or synapseID per row  
 `--input_synid` - A synapse ID  
@@ -35,7 +35,7 @@ nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input_path <path-to-
 `--keepBg` - Keep the background in thumbnails  
 `--level` - the pyramid level used in thumbnauls, Default: `-1` (highest)  
 `--bioformats2ometiff` - Convert images to ome-tiff. Default: `true`  
-`--synapseconfig` - Path to a synapseConfig file. Required for Synapse authentication  
+`--synapseconfig` - Path to a synapseConfig file. Required for Synapse authentication
 
 ## Example flow diagram:
 
