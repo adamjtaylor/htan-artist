@@ -9,7 +9,12 @@ workflow SAMPLESHEET_SPLIT {
         .map { 
             row -> 
             def meta = [:]
-            meta.id = file(row.image).simpleName
+            if (row.id ) {
+                meta.id = row.id
+            } else {
+                meta.id = file(row.image).simpleName
+
+            }
             meta.ome = row.image ==~ /.+\.ome\.tif{1,2}$/
             meta.convert = row.convert.toBoolean()
             meta.he = row.he.toBoolean()
