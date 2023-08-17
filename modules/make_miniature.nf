@@ -5,7 +5,7 @@ process make_miniature {
   output:
       tuple val(meta), file('miniature.jpg')
   publishDir "$params.outdir/$workflow.runName",
-    saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.jpg"}
+    saveAs: {filename -> "${meta.id}/thumbnail.jpg"}
   stub:
   """
   mkdir data
