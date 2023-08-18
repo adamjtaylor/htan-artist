@@ -15,6 +15,27 @@ A Docker container ([ghcr.io/sage-bionetworks-workflows/nf-artist](https://githu
 nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input <path-to-samplesheet> --outdir <output-directory>
 ```
 
+## Output
+
+`nf-artist` outputs the following directory structure into the specified output directory (`outdir`):
+
+```
+├── outdir
+│   ├── <simpleName or id for first row of samplesheet>
+│   │   ├── thumbnail.jpeg
+│   │   ├── minerva
+│   │   │   ├── index.html
+│   │   │   ├── exhibit.json
+│   │   │   ├── story.json
+│   │   │   ├── Group-1
+│   │   │   │   ├── tile1.jpeg
+│   │   │   │   ├── ...
+│   │   │   ├── Group-<n>
+│   │   │   │   ├── tile1.jpeg
+│   │   │   │   ├── ...
+│   ├── < simpleName or id for n'th row of samplesheet>
+```
+
 ## Options
 
 `--input` [required] - Path to samplesheet. See samplesheet requirements  
