@@ -38,8 +38,23 @@ nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input <path-to-sampl
 
 ## Options
 
-`--input` [required] - Path to samplesheet. See samplesheet requirements  
-`--outdir` - Output directory. Default: `outputs`
+#### Input/Output Options:
+
+* **input**: Path to a CSV sample sheet. This parameter is required. (Type: String)
+
+* **outdir**: Specifies the directory where the output data should be saved. Default is "outputs". (Type: String)
+
+#### Miniature Options:
+
+* **remove_bg**: Setting this to true will remove the non-tissue background. Default is true. (Type: Boolean)
+
+* **level**: Specifies the pyramid level used in thumbnails. Default is -1 (smallest). (Type: Integer)
+
+* **dimred**: The dimensionality reduction method used. Default is "umap". Options include "umap", "tsne", and "pca". (Type: String)
+
+* **colormap**: Specifies the colormap used. Ensure the colormap is compatible with the number of `n_components` selected. Default is "UCIE". 3D colormap options: "UCIE", "LAB", "RGB". 2D colormap options: "BREMM", "SCHUMANN", "STEIGER", "TEULING2", "ZIEGLER", "CUBEDIAGONAL". (Type: String)
+
+* **n_components**: Specifies the number of components. Default is 3. Options are 2 and 3. (Type: Integer)
 
 #### Samplesheet requriments
 
