@@ -3,13 +3,13 @@ process make_miniature {
   input:
       tuple val(meta), file(image) 
   output:
-      tuple val(meta), file('thumbnail.jpg')
-  publishDir "$params.outdir",
-    saveAs: {filename -> "${meta.id}/thumbnail.jpg"}
+      tuple val(meta), file('miniature.jpg')
+  publishDir "$params.outdir/$workflow.runName",
+    saveAs: {filename -> "${meta.id}/$workflow.runName/thumbnail.jpg"}
   stub:
   """
   mkdir data
-  touch data/thumbnail.jpg
+  touch data/miniature.jpg
   """
   script:
   if ( meta.he){
@@ -23,12 +23,12 @@ process make_miniature {
     slide = TiffSlide('$image')
 
     thumb = slide.get_thumbnail((512, 512))
-    thumb.save('thumbnail.jpg')
+    thumb.save('miniature.jpg')
     """
   } else {
     """
     python3 /miniature/bin/paint_miniature.py \
-      $image 'thumbnail.jpg' \
+      $image 'miniature.jpg' \
       --level $params.level \
       --dimred $params.dimred \
       --colormap $params.colormap \
