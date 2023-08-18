@@ -34,11 +34,7 @@
                 "remove_bg": {
                     "type": "boolean",
                     "description": "Whether to Keep the background in thumbnails",
-                    "default": true,
-                    "enum": [
-                        true,
-                        false
-                    ]
+                    "default": true
                 },
                 "level": {
                     "type": "integer",
