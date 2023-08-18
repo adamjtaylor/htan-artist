@@ -3,7 +3,7 @@
 A NextFlow pipeline to run image rendering process to generate resources for the [HTAN Portal](https://github.com/ncihtan/htan-portal).
 
 - Converts bioformats files into OME-TIFF
-- Generates a `story.json` file using [Auto-Minerva](https://github.com/jmuhlich/auto-minerva)
+- Sets thresholds for each channel and pepares 4-channel overlay groups using [Auto-Minerva](https://github.com/jmuhlich/auto-minerva)
 - Renders a Minerva story using [Minerva Author](https://github.com/labsyspharm/minerva-author)
 - Renders a thumbnail image using [Miniature](https://github.com/adamjtaylor/miniature)
 
@@ -14,6 +14,7 @@ A Docker container ([ghcr.io/sage-bionetworks-workflows/nf-artist](https://githu
 ```
 nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input <path-to-samplesheet> --outdir <output-directory>
 ```
+
 
 ## Output
 
@@ -56,7 +57,7 @@ nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input <path-to-sampl
 
 * **n_components**: Specifies the number of components. Default is 3. Options are 2 and 3. (Type: Integer)
 
-#### Samplesheet requriments
+#### Samplesheet requirements
 
 The samplesheet specified in the `input` parameter should be a CSV file with the following columns
 
@@ -65,4 +66,5 @@ The samplesheet specified in the `input` parameter should be a CSV file with the
 - `he`: [boolean] Is the image a H&E image
 - `minerva`: [boolean] Should a Minerva story be generated
 - `miniatuee`: [boolean] Should a Miniature thumbnail be generated
+- `id`: *optional* [string] A custom identifier to replace image simpleName in output directory structure 
 
