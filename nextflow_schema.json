@@ -33,7 +33,7 @@
             "properties": {
                 "remove_bg": {
                     "type": "boolean",
-                    "description": "Whether to Keep the background in thumbnails",
+                    "description": "Remove non-tissue background",
                     "default": true
                 },
                 "level": {
