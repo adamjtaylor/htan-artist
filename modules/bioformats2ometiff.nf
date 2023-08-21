@@ -1,4 +1,5 @@
 process bioformats2ometiff {
+  tag {"$meta.id"}
   label "process_medium"
   input:
       tuple val(meta), file(image) 

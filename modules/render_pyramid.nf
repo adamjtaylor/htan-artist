@@ -1,4 +1,5 @@
 process render_pyramid {
+  tag {"$meta.id"}
   label "process_medium"
   input:
       tuple val(meta), file(image), file (story)

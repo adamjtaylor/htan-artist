@@ -1,4 +1,5 @@
 process autominerva_story {
+  tag {"$meta.id"}
   label "process_low"
   input:
       tuple val(meta), file(image) 
