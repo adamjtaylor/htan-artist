@@ -1,2 +1,3 @@
 image,convert,he,minerva,miniature,id
-data/cycif_tonsil_small.tiff,false,false,true,false,my_custom_id
+datas/exemplar-001_small.tif,true,false,true,true,cycif
+data/CMU-1-Small-Region.svs,true,true,true,true,h_and_e
