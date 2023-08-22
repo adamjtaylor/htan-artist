@@ -49,8 +49,7 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
 RUN source /venv/bin/activate && \
     git clone https://github.com/adamjtaylor/miniature.git -b v2 && \
     git clone https://github.com/adamjtaylor/auto-minerva.git -b minerva1point5 && \
-    git clone https://github.com/labsyspharm/minerva-author.git minerva-author-dev && \
-    git clone https://github.com/labsyspharm/minerva-author.git -b v1.11.2 &&  \
+    git clone https://github.com/labsyspharm/minerva-author.git -b v1.14.0 &&  \
     pip install git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib && \
     pip install openslide-python && \
     pip install opencv-python-headless \
