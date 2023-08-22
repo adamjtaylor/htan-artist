@@ -4,3 +4,4 @@ work/
 test-outputs/
 flowchart*
 outputs/*
+.DS_Store
