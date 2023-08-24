@@ -1,4 +1,6 @@
 process render_pyramid {
+  tag {"$meta.id"}
+  label "process_medium"
   input:
       tuple val(meta), file(image), file (story)
   output:
@@ -15,7 +17,6 @@ process render_pyramid {
   script:
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
-    cp /index.html minerva
     """
     
 }

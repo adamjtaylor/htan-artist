@@ -1,5 +1,6 @@
 process make_miniature {
-  label "process_medium"
+  tag {"$meta.id"}
+  label "process_high"
   input:
       tuple val(meta), file(image) 
   output:
