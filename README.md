@@ -12,7 +12,7 @@ A Docker container ([ghcr.io/sage-bionetworks-workflows/nf-artist](https://githu
 ## Example usage
 
 ```
-nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input <path-to-samplesheet> --outdir <output-directory>
+nextflow run Sage-Bionetworks-Workflows/nf-artist --input <path-to-samplesheet> --outdir <output-directory>
 ```
 
 
