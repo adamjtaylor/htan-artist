@@ -1,13 +1,15 @@
-name: Run pipeline
+name: Run nf-artist test data
+
 on:
-  push:
-    branches:
-      - "main"
-      - "nextflow-action"
+  pull_request:
+    branches: 'main'
+    paths: 'HTAN.model.csv'
+  workflow_dispatch:
+
 jobs:
-  example:
+  nf-artist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: nf-core/setup-nextflow@v1
-      - run: nextflow run ${GITHUB_WORKSPACE} --input data/test_samplesheet.csv 
+      - run: nextflow run ${GITHUB_WORKSPACE} --input data/test_samplesheet.csv
