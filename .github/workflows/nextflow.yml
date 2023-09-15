@@ -3,7 +3,6 @@ name: Run nf-artist test data
 on:
   pull_request:
     branches: 'main'
-    paths: 'HTAN.model.csv'
   workflow_dispatch:
 
 jobs:
