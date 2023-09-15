@@ -65,6 +65,6 @@ The samplesheet specified in the `input` parameter should be a CSV file with the
 - `convert`: [boolean] Should the image be converted to a OME-TIFF
 - `he`: [boolean] Is the image a H&E image
 - `minerva`: [boolean] Should a Minerva story be generated
-- `miniatuee`: [boolean] Should a Miniature thumbnail be generated
+- `miniature`: [boolean] Should a Miniature thumbnail be generated
 - `id`: *optional* [string] A custom identifier to replace image simpleName in output directory structure 
 
