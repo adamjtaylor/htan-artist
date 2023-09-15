@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "main"
+      - "nextflow-action"
 jobs:
   example:
     runs-on: ubuntu-latest
