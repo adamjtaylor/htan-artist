@@ -1,0 +1,14 @@
+name: Run nf-artist test data
+
+on:
+  pull_request:
+    branches: 'main'
+  workflow_dispatch:
+
+jobs:
+  nf-artist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nf-core/setup-nextflow@v1
+      - run: nextflow run ${GITHUB_WORKSPACE} -profile test
