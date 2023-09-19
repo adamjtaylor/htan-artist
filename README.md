@@ -1,6 +1,6 @@
-# HTAN Artist
+# nf-artist
 
-A NextFlow pipeline to run image rendering process to generate resources for the [HTAN Portal](https://github.com/ncihtan/htan-portal).
+A NextFlow pipeline to generate visualizations of multiplexed tissue imaging datasets. Initially developed for the [HTAN Data Portal](data.humantumoratlas.org).
 
 - Converts bioformats files into OME-TIFF
 - Sets thresholds for each channel and pepares 4-channel overlay groups using [Auto-Minerva](https://github.com/jmuhlich/auto-minerva)
