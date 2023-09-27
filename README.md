@@ -1,5 +1,7 @@
 # HTAN Artist
 
+## 🚨 This workflow has been superseded by [nf-artist](https://github.com/Sage-Bionetworks-Workflows/nf-artist). 
+
 A NextFlow piepline to run image rendering process to generate resources for the [HTAN Portal](https://github.com/ncihtan/htan-portal).
 
 - Converts bioformats files into OME-TIFF
